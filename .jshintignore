@@ -1,3 +1,2 @@
-server/database/node_modules/
+**/node_modules/**
 server/frontend/build/
-node_modules/
