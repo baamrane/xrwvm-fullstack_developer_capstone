@@ -1,6 +1,5 @@
 # Uncomment the required imports before adding the code
 
-from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, login, authenticate
 from django.http import JsonResponse
@@ -51,17 +50,14 @@ def login_user(request):
 
 
 # Create a `logout_request` view to handle sign out request
-
 def logout_request(request):
     logout(request)  # Terminate user session
     data = {"userName": ""}  # Return empty username
     return JsonResponse(data)
-# ...
 
 
 # Create a `registration` view to handle sign up request
 @csrf_exempt
-
 def registration(request):
     # Load JSON data from the request body
     data = json.loads(request.body)
@@ -96,11 +92,10 @@ def registration(request):
     else:
         data = {"userName": username, "error": "Already Registered"}
         return JsonResponse(data)
-# ...
+
 
 # Update the `get_dealerships` render list of dealerships all by default,
 # particular state if state is passed
-
 def get_dealerships(request, state="All"):
     if state == "All":
         endpoint = "/fetchDealers"
@@ -131,11 +126,13 @@ def add_review(request):
     if request.user.is_anonymous is False:
         data = json.loads(request.body)
         try:
-            response = post_review(data)
-            # response is not used; only status returned
+            post_review(data)
             return JsonResponse({"status": 200})
         except Exception:
-            return JsonResponse({"status": 401, "message": "Error in posting review"})
+            return JsonResponse({
+                "status": 401,
+                "message": "Error in posting review",
+            })
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
 
