@@ -38,7 +38,7 @@ const PostReview = () => {
 
     let jsoninput = JSON.stringify({
       "name": name,
-      "dealership": id,
+      "dealership": parseInt(id, 10),
       "review": review,
       "purchase": true,
       "purchase_date": date,
@@ -62,18 +62,15 @@ const PostReview = () => {
   }
 
   }
-  const get_dealer = async ()=>{
-    const res = await fetch(dealer_url, {
-      method: "GET"
-    });
-    const retobj = await res.json();
-    
-    if(retobj.status === 200) {
-      let dealerobjs = Array.from(retobj.dealer)
-      if(dealerobjs.length > 0)
-        setDealer(dealerobjs[0])
-    }
+  const get_dealer = async () => {
+  const res = await fetch(dealer_url, { method: "GET" });
+  const retobj = await res.json();
+
+  if (retobj.status === 200) {
+    setDealer(retobj.dealer);   // ✅ dealer is an object
   }
+};
+
 
   const get_cars = async ()=>{
     const res = await fetch(carmodels_url, {
@@ -101,12 +98,23 @@ const PostReview = () => {
       </div>
       <div className='input_field'>
       Car Make 
-      <select name="cars" id="cars" onChange={(e) => setModel(e.target.value)}>
-      <option value="" selected disabled hidden>Choose Car Make and Model</option>
-      {carmodels.map(carmodel => (
-          <option value={carmodel.CarMake+" "+carmodel.CarModel}>{carmodel.CarMake} {carmodel.CarModel}</option>
-      ))}
-      </select>        
+      <select
+        name="cars"
+        id="cars"
+        defaultValue=""
+        onChange={(e) => setModel(e.target.value)}
+        >
+        <option value="" disabled hidden>Choose Car Make and Model</option>
+        {carmodels.map((carmodel) => (
+            <option
+            key={`${carmodel.CarMake}-${carmodel.CarModel}`}
+            value={`${carmodel.CarMake} ${carmodel.CarModel}`}
+            >
+            {carmodel.CarMake} {carmodel.CarModel}
+            </option>
+        ))}
+      </select>
+       
       </div >
 
       <div className='input_field'>

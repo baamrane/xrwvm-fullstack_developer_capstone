@@ -13,11 +13,13 @@ services:
 
   # Node api service
   api:
-    image: nodeapp
+    build: .
+    container_name: database-api
     ports:
       - 3030:3030
-    depends_on: 
+    depends_on:
       - mongo_db
+
 
 volumes:
   mongo_data: {}
